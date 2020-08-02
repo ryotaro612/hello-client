@@ -4,6 +4,7 @@ import utilStyles from '../styles/utils.module.css'
 import { getSortedPostsData } from '../lib/posts'
 import Link from 'next/link'
 import Date from '../components/date'
+const axios = require('axios');
 
 export default function Home({ allPostsData }) {
   return (
@@ -38,11 +39,22 @@ export default function Home({ allPostsData }) {
   )
 }
 
+async function getMessage() {
+  const result = await axios.get('/v1/message')
+  .then(function (response) {
+    // handle success
+    console.log(response);
+  })
+  return result
+}
+
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData()
+  const message = await getMessage()
   return {
     props: {
-      allPostsData
+      allPostsData,
+      message
     }
   }
 }
